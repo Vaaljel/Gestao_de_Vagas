@@ -13,24 +13,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name="job")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class JobEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
     private UUID id;
     private String description;
     private String benefits;
+
+    @NotBlank(message ="Esse campo é obrigatório")
     private String level;
 
     @ManyToOne
     @JoinColumn(name="company_id", insertable =  false, updatable = false)
     private CompanyEntity companyEntity;
 
-    @Column(name="companu_id")
+    @Column(name="company_id")
     private UUID companyId;
 
     @CreationTimestamp

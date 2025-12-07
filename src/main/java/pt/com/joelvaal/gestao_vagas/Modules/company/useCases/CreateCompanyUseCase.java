@@ -1,6 +1,7 @@
 package pt.com.joelvaal.gestao_vagas.Modules.company.useCases;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import pt.com.joelvaal.gestao_vagas.Modules.company.entites.CompanyEntity;
@@ -11,6 +12,9 @@ import pt.com.joelvaal.gestao_vagas.exception.UserFoundException;
 public class CreateCompanyUseCase {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private CompanyRepository companyRepository;
 
     public  CompanyEntity execute(CompanyEntity companyEntity){
@@ -19,7 +23,10 @@ public class CreateCompanyUseCase {
         .ifPresent((user) ->{
             throw new UserFoundException();
         });
+        
+        var password = passwordEncoder.encode(companyEntity.getPassword());
+        companyEntity.setPassword(password);
+        
         return this.companyRepository.save(companyEntity);
     }
-    
 }
